@@ -1,0 +1,2 @@
+放这里只是用来打APK包
+Android运行时，从包外persistentDataPath读取DLL
