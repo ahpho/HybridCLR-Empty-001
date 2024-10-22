@@ -1,4 +1,6 @@
+ï»¿/*
 using HybridCLR;
+*/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,12 +11,19 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// ²Î¿¼£ºhttps://blog.csdn.net/Czhenya/article/details/135164154
+// å‚è€ƒï¼šhttps://blog.csdn.net/Czhenya/article/details/135164154
 /////////////////////////////////////////////////////////////////////////////////////////
 public class LoadDll : MonoBehaviour
 {
+    void Start()
+    {
+        SceneManager.LoadScene("main", LoadSceneMode.Single);
+    }
+
+    /*
     private Assembly m_HotUpdateAssembly = null;
 
     private static Dictionary<string, byte[]> ms_assetsData = new ();
@@ -104,32 +113,32 @@ public class LoadDll : MonoBehaviour
 
     private void InitHotUpdateDLLs()
     {
-        // ²¹³äÔªÊı¾İ
+        // è¡¥å……å…ƒæ•°æ®
         LoadMetadataForAOTAssemblies();
 
-        // Editor»·¾³ÏÂ£¬HotUpdate.dll.bytesÒÑ¾­±»×Ô¶¯¼ÓÔØ£¬²»ĞèÒª¼ÓÔØ£¬ÖØ¸´¼ÓÔØ·´¶ø»á³öÎÊÌâ¡£
+        // Editorç¯å¢ƒä¸‹ï¼ŒHotUpdate.dll.byteså·²ç»è¢«è‡ªåŠ¨åŠ è½½ï¼Œä¸éœ€è¦åŠ è½½ï¼Œé‡å¤åŠ è½½åè€Œä¼šå‡ºé—®é¢˜ã€‚
 #if !UNITY_EDITOR
         m_HotUpdateAssembly = Assembly.Load(ReadBytesFromStreamingAssets("HotUpdate.dll.bytes"));
 #else
-        m_HotUpdateAssembly = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "HotUpdate"); //EditorÖ±½Ó²éÕÒ³ÌĞò¼¯
+        m_HotUpdateAssembly = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "HotUpdate"); //Editorç›´æ¥æŸ¥æ‰¾ç¨‹åºé›†
 #endif
 
-        // Ê¹ÓÃÈÈ¸üµÄ´úÂë
+        // ä½¿ç”¨çƒ­æ›´çš„ä»£ç 
         Type type = m_HotUpdateAssembly.GetType("Hello");
         type.GetMethod("Run").Invoke(null, null);
 
-        // ÊÍ·ÅÄÚ´æ¡£DemoÕâÀïÍíµã¶ùµ÷£¬ÒòÎªÑİÊ¾AB»¹ÒªÓÃ
+        // é‡Šæ”¾å†…å­˜ã€‚Demoè¿™é‡Œæ™šç‚¹å„¿è°ƒï¼Œå› ä¸ºæ¼”ç¤ºABè¿˜è¦ç”¨
         //CleanUpAssetsData();
     }
 
     /// <summary>
-    /// Îªaot assembly¼ÓÔØÔ­Ê¼metadata£¬ Õâ¸ö´úÂë·Åaot»òÕßÈÈ¸üĞÂ¶¼ĞĞ¡£
-    /// Ò»µ©¼ÓÔØºó£¬Èç¹ûAOT·ºĞÍº¯Êı¶ÔÓ¦nativeÊµÏÖ²»´æÔÚ£¬Ôò×Ô¶¯Ìæ»»Îª½âÊÍÄ£Ê½Ö´ĞĞ
+    /// ä¸ºaot assemblyåŠ è½½åŸå§‹metadataï¼Œ è¿™ä¸ªä»£ç æ”¾aotæˆ–è€…çƒ­æ›´æ–°éƒ½è¡Œã€‚
+    /// ä¸€æ—¦åŠ è½½åï¼Œå¦‚æœAOTæ³›å‹å‡½æ•°å¯¹åº”nativeå®ç°ä¸å­˜åœ¨ï¼Œåˆ™è‡ªåŠ¨æ›¿æ¢ä¸ºè§£é‡Šæ¨¡å¼æ‰§è¡Œ
     /// </summary>
     private static void LoadMetadataForAOTAssemblies()
     {
-        // ×¢Òâ£¬²¹³äÔªÊı¾İÊÇ¸øAOT dll²¹³äÔªÊı¾İ£¬¶ø²»ÊÇ¸øÈÈ¸üĞÂdll²¹³äÔªÊı¾İ¡£
-        // ÈÈ¸üĞÂdll²»È±ÔªÊı¾İ£¬²»ĞèÒª²¹³ä£¬Èç¹ûµ÷ÓÃLoadMetadataForAOTAssembly»á·µ»Ø´íÎó
+        // æ³¨æ„ï¼Œè¡¥å……å…ƒæ•°æ®æ˜¯ç»™AOT dllè¡¥å……å…ƒæ•°æ®ï¼Œè€Œä¸æ˜¯ç»™çƒ­æ›´æ–°dllè¡¥å……å…ƒæ•°æ®ã€‚
+        // çƒ­æ›´æ–°dllä¸ç¼ºå…ƒæ•°æ®ï¼Œä¸éœ€è¦è¡¥å……ï¼Œå¦‚æœè°ƒç”¨LoadMetadataForAOTAssemblyä¼šè¿”å›é”™è¯¯
         HomologousImageMode mode = HomologousImageMode.SuperSet;
         foreach (var aotDllName in AOTMetaAssemblyFiles)
         {
@@ -139,7 +148,7 @@ public class LoadDll : MonoBehaviour
                 Debug.LogError($"LoadMetadata read failed: {aotDllName}");
                 continue;
             }
-            // ¼ÓÔØassembly¶ÔÓ¦µÄdll£¬»á×Ô¶¯ÎªËühook¡£Ò»µ©aot·ºĞÍº¯ÊıµÄnativeº¯Êı²»´æÔÚ£¬ÓÃ½âÊÍÆ÷°æ±¾´úÂë
+            // åŠ è½½assemblyå¯¹åº”çš„dllï¼Œä¼šè‡ªåŠ¨ä¸ºå®ƒhookã€‚ä¸€æ—¦aotæ³›å‹å‡½æ•°çš„nativeå‡½æ•°ä¸å­˜åœ¨ï¼Œç”¨è§£é‡Šå™¨ç‰ˆæœ¬ä»£ç 
             LoadImageErrorCode err = RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, mode);
             Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. mode:{mode} ret:{err}");
         }
@@ -147,7 +156,7 @@ public class LoadDll : MonoBehaviour
 
     private static void Run_InstantiateComponentByAsset()
     {
-        // Í¨¹ıÊµÀı»¯AssetbBundleÖĞµÄ×ÊÔ´£¬»¹Ô­×ÊÔ´ÉÏµÄÈÈ¸üĞÂ½Å±¾
+        // é€šè¿‡å®ä¾‹åŒ–AssetbBundleä¸­çš„èµ„æºï¼Œè¿˜åŸèµ„æºä¸Šçš„çƒ­æ›´æ–°è„šæœ¬
         string abName = "prefabs";
         byte[] abBytes = ReadBytesFromStreamingAssets(abName);
         if (abBytes == null)
@@ -159,4 +168,5 @@ public class LoadDll : MonoBehaviour
         GameObject cube = ab.LoadAsset<GameObject>("Cube");
         GameObject.Instantiate(cube);
     }
+    */
 }
