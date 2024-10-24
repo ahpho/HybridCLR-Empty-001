@@ -88,6 +88,8 @@ namespace HybridCLR.Editor.Commands
             bool oldBuildScriptsOnly = EditorUserBuildSettings.buildScriptsOnly;
 
             string oldBuildLocation = EditorUserBuildSettings.GetBuildLocation(target);
+            Debug.Log($"......................... oldBuildLocation={oldBuildLocation}");
+
             try
             {
                 CheckSettings.DisableMethodBridgeDevelopmentFlagChecking = true;
@@ -95,6 +97,8 @@ namespace HybridCLR.Editor.Commands
 
                 string location = GetLocationPathName(outputPath, target);
                 EditorUserBuildSettings.SetBuildLocation(target, location);
+                Debug.Log($"......................... set BuildLocation={location}");
+                Debug.Log($"......................... after set={EditorUserBuildSettings.GetBuildLocation(target)}");
 
                 switch (target)
                 {
@@ -141,13 +145,20 @@ namespace HybridCLR.Editor.Commands
                     targetGroup = BuildPipeline.GetBuildTargetGroup(target),
                 };
 
-                var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                Debug.Log($"......................... beforeBuildLocation={EditorUserBuildSettings.GetBuildLocation(target)}");
+                Debug.Log($"......................... Parent_1={new NiceIO.NPath(EditorUserBuildSettings.GetBuildLocation(target)).Parent}");
+                Debug.Log($"......................... CurDir={System.IO.Directory.GetCurrentDirectory()}");
 
-
-
-                if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
+                if (true)
                 {
-                    throw new Exception("GenerateStripedAOTDlls failed");
+                    var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+					
+					
+					
+                    if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
+                    {
+                        throw new Exception("GenerateStripedAOTDlls failed");
+                    }
                 }
             }
             finally
