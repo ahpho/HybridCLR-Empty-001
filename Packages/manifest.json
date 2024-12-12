@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.code-philosophy.hybridclr": "file:../CustomPackages/com.code-philosophy.hybridclr@64a6d26fa3",
     "com.unity.collab-proxy": "2.0.7",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.31",
